@@ -121,11 +121,11 @@ int main(int argc, char* argv[])
 //   	 printf("%s\n",answer[i]);
 //   }
   int64_t end = now();
-  // for (int i = 0;i < total_ques; ++i){
-  //       printf("%s\n",answer[i]);
-  // }
+  for (int i = 0;i < total_ques; ++i){
+        printf("%s\n",answer[i]);
+  }
   double sec = (end-start)/1000000.0;
-  printf("%f sec %f ms each %d\n", sec, 1000*sec/total_ques, total_solved);
+  //printf("%f sec %f ms each %d\n", sec, 1000*sec/total_ques, total_solved);
 
   return 0;
 }
