@@ -86,5 +86,5 @@ Members: Bangbo Liang	Qi Shen	Xinyu Wang	Yifan Zhou
 
 ​	Figure 2-2 shows the test results of Code2 adjusting the number of different sudoku_solve threads in different hardware environments **ENV1(Blue) **and **ENV2(Orange)**.
 
-​	Since the CPU is greater than the frequency ENV1 ENV2, so the number of threads in all conditions, Code2 ENV1 runtime environment is less than the time spent ENV2. Since the ENV2 environment has only two logical CPUs, it takes the shortest time when the number of threads is 2, and the time fluctuates up and down when the number of threads increases again, but the overall increase is slow. ENV1 has 12 logical CPU cores, so the time is decreasing before the number of threads reaches 12.
+​	Since the ENV1 CPU frequency is greater than the  ENV2, so the number of threads in all conditions, Code2  runtime on environment ENV1 is less than the time spent on ENV2. Since the ENV2 environment has only two logical CPUs, it takes the shortest time when the number of threads is 2, and the time fluctuates up and down when the number of threads increases again, but overall the time is increasing slowly. ENV1 has 12 logical CPU cores, so the time is decreasing before the number of threads reaches 12.
 
