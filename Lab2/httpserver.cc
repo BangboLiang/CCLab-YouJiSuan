@@ -113,13 +113,13 @@ void Error_dealer(string method,string url,int tsockfd)
 	string entity;
 	if(method!="GET"&&method!="POST")//GET和POST之外的请求
         {
-		entity="<htmL><title>501 Not Implemented</title><body bgcolor=ffffff>\n Not Implemented\n<p>Does not implement this method: "+method+"\n,<hr><em>HTTP Web Server </em>\n</body></html>\n";
+		entity="<htmL><title>501 Not Implemented</title><body bgcolor=ffffff>\n Not Implemented\n<p>Does not implement this method: "+method+"\n<hr><em>HTTP Web Server </em>\n</body></html>\n";
 		int ilen=entity.length();
 		stringstream ss;
 		ss<<ilen;
 		string slen;
 		ss>>slen;
-		string tmp="Http/1.1 501 Not Implemented\r\nContent-type: text/html\r\nContent-Length:"+slen+"\r\n\r\n";
+		string tmp="HTTP/1.1 501 Not Implemented\r\nServer: Youjisuan Web Server\r\nContent-Type: text/html\r\nContent-Length: "+slen+"\r\nConnection: Keep-Alive\r\n\r\n";
 		string message=tmp+entity;
                 char send_buf[1024];
                 sprintf(send_buf,"%s",message.c_str());
@@ -130,7 +130,7 @@ void Error_dealer(string method,string url,int tsockfd)
         {
 		if(method=="GET")//GET请求不满足要求
                 {
-			entity="<html><title>GET 404 Not Found</title><body bgcolor=ffffff>\n Not Found\n<p>Couldn't find this file: "+url+"\n<hr><em>HTTP Web Sever</em>\n</body></html>\n";
+			entity="<html><title>GET 404 Not Found</title><body bgcolor=ffffff>\n Not Found\n<p>Couldn't find this file: ."+url+"\n<hr><em>HTTP Web Sever</em>\n</body></html>\n";
 		}
 		else if(method=="POST")//POST请求不满足要求
                 {
@@ -141,7 +141,7 @@ void Error_dealer(string method,string url,int tsockfd)
 		ss<<ilen;
 		string slen;
 		ss>>slen;
-		string tmp="Http/1.1 404 Not Found\r\nContent-type: text/html\r\nContent-Length:"+slen+"\r\n\r\n";
+		string tmp="HTTP/1.1 404 Not Found\r\nServer: Youjisuan Web Server\r\nContent-Type: text/html\r\nContent-Length: "+slen+"\r\nConnection: Keep-Alive\r\n\r\n";
 		string message=tmp+entity;
 		char send_buf[1024];
                 sprintf(send_buf,"%s",message.c_str());
@@ -169,7 +169,7 @@ void Get_dealer(string method,string url,int tsockfd)
                 struct stat stat_buf;
    		fstat(fd,&stat_buf);
 		char outstring[1024];
-                sprintf(outstring,"Http/1.1 200 OK\r\nContent-Length:%d\r\nContent-Type: text/html\r\n\r\n",stat_buf.st_size);
+                sprintf(outstring,"HTTP/1.1 200 OK\r\nServer: Youjisuan Web Server\r\nContent-Length: %d\r\nContent-Type: text/html\r\nConnection: Keep-Alive\r\n\r\n",stat_buf.st_size);
 		write(tsockfd,outstring,strlen(outstring));
 		sendfile(tsockfd,fd,0,stat_buf.st_size);
 	}
@@ -187,7 +187,7 @@ void Post_dealer(string name,string ID,int tsockfd)
 	ss<<ilen;
 	string slen;
 	ss>>slen;
-	string tmp="HTTP/1.1 200 OK\r\nContent-type: text/html\r\nContent-Length: "+slen+"\r\n\r\n";
+	string tmp="HTTP/1.1 200 OK\r\nServer: Youjisuan Web Server\r\nContent-Type: text/html\r\nContent-Length: "+slen+"\r\nConnection: Keep-Alive\r\n\r\n";
 	string message=tmp+entity;
 	char send_buf[1024];
         sprintf(send_buf,"%s",message.c_str());
@@ -201,6 +201,7 @@ void Dealer(char* recv_buf,int tconnfd)
 	status=true;//持久连接标志
 	s_buf=string(recv_buf);
 	//处理http请求报文
+	//while(s_buf.find("HTTP/1.0")!=string::npos)//判断s_buf中有没有完整报文
 	while(s_buf.find("HTTP/1.1")!=string::npos)//判断s_buf中有没有完整报文
        {
 		int request_end_pos=0;//请求除主体外报文尾部         
